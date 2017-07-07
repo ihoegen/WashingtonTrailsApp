@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hoegendevelopments.washingtontrailsapp.MapActivity" >
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.hoegendevelopments.washingtontrailsapp.MapActivity" />
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_margin="18dp"
+        android:layout_marginTop="14dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:hint="Lena Lake Trail"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white" >
+    </EditText>
+    <Button
+        android:id="@+id/search"
+        android:layout_width="28dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="25dp"
+        android:background="@android:drawable/ic_search_category_default"
+        android:layout_alignRight="@+id/search_bar" />
+    <Button
+        android:id="@+id/clear"
+        android:layout_width="28dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="25dp"
+        android:visibility="gone"
+        android:layout_marginRight="30dp"
+        android:layout_alignRight="@+id/search"
+        android:background="@android:drawable/ic_menu_close_clear_cancel"
+    />
+
+    <TextView
+        android:id="@+id/trailname"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@android:color/white"
+        android:textColor="@android:color/black"
+        android:gravity="bottom"
+        android:text="Trail name. Click for graph"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
+
+
+</RelativeLayout>
