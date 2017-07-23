@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 class GetTrails extends AsyncTask<String, Void, String[]> {
     static String[] trails = new String[0];
@@ -37,18 +38,24 @@ class GetTrails extends AsyncTask<String, Void, String[]> {
                 }
                 Gson gson = new GsonBuilder().create();
                 String[] response = gson.fromJson(dta.toString(), String[].class);
+                for (int i = 0; i <  response.length; i++) {
+                    if (response[i] == null) {
+                        response[i] = "";
+                    }
+                }
+                Arrays.sort(response);
                 return response;
             } else {
-                return null;
+                return new String[0];
             }
         } catch (Exception e) {
             System.out.println(e);
-            return null;
+            return new String[0];
         }
     }
 
     protected void onPostExecute(String[] trailNames) {
-        if (trailNames == null) {
+        if (trailNames.length == 0) {
             Toast.makeText(MapActivity.currentActivity, "Connection error ",
                     Toast.LENGTH_SHORT).show();
             final TextView trailname = (TextView) MapActivity.currentActivity.findViewById(R.id.trailname);

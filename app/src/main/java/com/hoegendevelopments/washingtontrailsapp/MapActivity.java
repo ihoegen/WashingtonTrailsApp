@@ -15,18 +15,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.NestedScrollView;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +36,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     static final String apiURL = "http://washingtontrailfinder.herokuapp.com/";
@@ -46,7 +44,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     static Polyline path = null;
     static MapActivity currentActivity = null;
     static LineChart lineChart = null;
-    static void drawPaths(TrailCoords[] trailCoords, String lastTrail) {
+    static void drawPaths(Coordinate[] trailCoords, String lastTrail) {
         if (trailCoords == null) {
             Toast.makeText(MapActivity.currentActivity, "Cannot find trail " + lastTrail,
                     Toast.LENGTH_SHORT).show();
@@ -57,7 +55,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
         Double maxLat = null, minLat = null, minLon = null, maxLon = null;
         ArrayList<LatLng> coordsList = new ArrayList<>();
-        for (MapActivity.TrailCoords trailCoord : trailCoords) {
+        for (Coordinate trailCoord : trailCoords) {
             // Find out the maximum and minimum latitudes & longitudes
             // Latitude
             maxLat = maxLat != null ? Math.max(trailCoord.lat, maxLat) : trailCoord.lat;
@@ -80,7 +78,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         builder.include(new LatLng(maxLat, maxLon));
         builder.include(new LatLng(minLat, minLon));
         currentMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 48));
-        new Charts(MapActivity.lineChart).drawData(Charts.convertData(trailCoords));
     }
 
     @Override
@@ -102,6 +99,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         final SearchView searchbar = (SearchView) findViewById(R.id.search_bar);
         final TextView trailname = (TextView) findViewById(R.id.trailname);
         final ListView listView = (ListView) findViewById(R.id.search_suggestions);
+        final ImageView imageView = (ImageView) findViewById(R.id.grey_blocking);
+        imageView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                return false;
+            }
+        });
         lineChart = (LineChart) findViewById(R.id.chart);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
@@ -135,8 +139,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 // Get a handle to the list view
                 if (possibleMatches.size() > 0) {
                     listView.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
+                    hideScrollView();
                 } else {
                     listView.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
+                    showScrollView();
+
                 }
                 // Convert ArrayList to array
                 String[] suggestions = Arrays.copyOf(possibleMatches.toArray(), possibleMatches.size(), String[].class);
@@ -205,13 +214,29 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    void hideScrollView() {
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.scroll);
+        nestedScrollView.setVisibility(View.GONE);
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setVisibility(View.GONE);
+    }
+    void showScrollView() {
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.scroll);
+        nestedScrollView.setVisibility(View.VISIBLE);
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setVisibility(View.VISIBLE);
+    }
+
     void performSearch(String searchString) {
         final TextView trailInfo = (TextView) findViewById(R.id.trailname);
         final SearchView searchbar = (SearchView) findViewById(R.id.search_bar);
         final ListView listView = (ListView) findViewById(R.id.search_suggestions);
+        final ImageView imageView = (ImageView) findViewById(R.id.grey_blocking);
         searchbar.setQuery("", false);
         searchbar.clearFocus();
         listView.setVisibility(View.GONE);
+        showScrollView();
+        imageView.setVisibility(View.GONE);
         trailInfo.setVisibility(View.VISIBLE);
         trailInfo.setText(searchString);
         System.out.println(searchString);
@@ -239,8 +264,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         return suggestionList;
     }
 
-    public class TrailCoords {
-        double lat;
-        double lng;
+    public class Coordinate {
+        float lat;
+        float lng;
     }
 }

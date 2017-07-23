@@ -27,12 +27,14 @@ public class Charts {
         this.lineChart.invalidate(); // refresh
     }
 
-    public static ArrayList<Float[]> convertData(MapActivity.TrailCoords[] coords) {
+    public static ArrayList<Float[]> convertData(ElevationData elevationData) {
         ArrayList<Float[]> data = new ArrayList<>();
         float lastDistance = (float) 0;
-        for (int i = 1; i < coords.length; i++) {
-            float distance = getDistance(coords[i - 1], coords[i]);
-            Float[] dataItem = {distance + lastDistance, (float) i};
+        for (int i = 1; i < elevationData.results.size(); i++) {
+            ElevationData.Elevation current = elevationData.results.get(i);
+            ElevationData.Elevation previous = elevationData.results.get(i - 1);
+            float distance = getDistance(previous.location, current.location) + lastDistance;
+            Float[] dataItem = {distance, current.elevation};
             lastDistance = distance;
             data.add(dataItem);
         }
@@ -40,7 +42,7 @@ public class Charts {
         return data;
     }
 
-    public static float getDistance(MapActivity.TrailCoords coords1, MapActivity.TrailCoords coords2) {
+    public static float getDistance(MapActivity.Coordinate coords1, MapActivity.Coordinate coords2) {
         //Get values of our inputs
         double lat1 = coords1.lat;
         double lng1 = coords1.lng;
@@ -67,5 +69,13 @@ public class Charts {
         float distanceInMiles = (float) 0.62137119 * (float) distance;
         return Math.abs(distanceInMiles * 5280);
     }
-
+    class ElevationData {
+        class Elevation {
+            float elevation;
+            MapActivity.Coordinate location;
+            float resolution;
+        }
+        ArrayList<Elevation> results;
+        String status;
+    }
 }

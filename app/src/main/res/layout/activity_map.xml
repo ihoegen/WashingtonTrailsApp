@@ -42,32 +42,44 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/grey_blocking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#EDE6DE"
+            android:visibility="invisible" />
+
+        <ListView
+            android:id="@+id/search_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="100dp"
+            android:layout_below="@id/search_bar"
+            android:background="@android:color/white"
+            android:visibility="invisible" />
 
         <SearchView
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:layout_margin="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="14dp"
             android:background="@android:color/white"
             android:hint="Lena Lake Trail"
             android:iconifiedByDefault="false"
             android:maxLines="1"
             android:textColor="@android:color/black" />
-
-        <ListView
-            android:id="@+id/search_suggestions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/search_bar"
-            android:background="@android:color/white"
-            android:visibility="invisible" />
-    </LinearLayout>
+    </FrameLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"
@@ -96,9 +108,9 @@
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
-                    android:layout_margin="50dp"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp" />
+                    android:layout_height="240dp"
+                    android:layout_margin="50dp" />
 
             </LinearLayout>
 
