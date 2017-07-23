@@ -1,54 +1,123 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hoegendevelopments.washingtontrailsapp.MapActivity" >
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:fitsSystemWindows="true"
+    tools:context="com.hoegendevelopments.washingtontrailsapp.MapActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="575dp"
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                class="com.hoegendevelopments.washingtontrailsapp.CustomFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.hoegendevelopments.washingtontrailsapp.MapActivity" />
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="168dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.hoegendevelopments.washingtontrailsapp.MapActivity" />
-    <SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:iconifiedByDefault="false"
-        android:layout_alignParentTop="true"
-        android:layout_margin="18dp"
-        android:layout_marginTop="14dp"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:hint="Lena Lake Trail"
-        android:textColor="@android:color/black"
-        android:background="@android:color/white" >
-    </SearchView>
-    <ListView
-        android:id="@+id/search_suggestions"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_margin="18dp"
+            android:layout_marginTop="14dp"
+            android:background="@android:color/white"
+            android:hint="Lena Lake Trail"
+            android:iconifiedByDefault="false"
+            android:maxLines="1"
+            android:textColor="@android:color/black" />
+
+        <ListView
+            android:id="@+id/search_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search_bar"
+            android:background="@android:color/white"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@android:color/white"
-        android:layout_below="@id/search_bar">
-    </ListView>
-    <TextView
-        android:id="@+id/trailname"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:background="@android:color/white"
-        android:textColor="@android:color/black"
-        android:gravity="bottom"
-        android:text="Trail name. Click for graph"
-        android:paddingTop="30dp"
-        android:paddingBottom="30dp"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        android:visibility="gone"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/trailname"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:paddingBottom="30dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="30dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart"
+                    android:layout_margin="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_marginRight="15dp"
+        android:src="@android:drawable/ic_menu_mylocation"
+        app:backgroundTint="#4a80f5"
+        app:backgroundTintMode="src_over"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|right|end" />
 
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
